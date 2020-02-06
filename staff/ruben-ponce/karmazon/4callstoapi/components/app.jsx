@@ -4,19 +4,32 @@ const { Component, Fragment } = React
 
 class App extends Component {
 
-    state = { view: 'login', loggedIn: false, vehicles: undefined, vehicle: undefined, style:undefined, error: undefined }
+    state = { view: 'login', loggedIn: false, vehicles: undefined, vehicle: undefined, style:undefined, error: undefined, token: undefined }
 
     handleLogin = (username, password) => {
         try {
-            authenticate(username, password)
-            
-            this.setState({ view: 'search' })
+            authenticateUser(username, password, (error, token) => {
+                if (error) {
+                    this.setState({ error: error.message + ' ' + IT })
+
+                    setTimeout(() => {
+                        this.setState({ error: undefined })
+                    }, 3000)
+                } else {
+                    retrieveUser(token, (error, user) => {
+                        if(error)
+                            return this.setState({ error: error.message + ' ' + IT })
+                    
+                        this.setState({ view: 'search', user })
+                    })
+                }
+            })
         } catch (error) {
             this.setState({error: error.message + ' ' + IT})
 
             setTimeout(() => {
-                this.setState({error:undefined})
-            }, 2000);
+                this.setState({error: undefined})
+            }, 3000)
         }    
     }
 
@@ -24,29 +37,38 @@ class App extends Component {
 
     handleRegister = (name, surname, username, password) => {
         try {
-            register(name, surname, username, password)
-            this.setState({view: 'login'})
+            registerUser(name, surname, username, password, error => {
+                if (error) { 
+                    this.setState({error: error.message + ' ' + IT})
+
+                    setTimeout(() => {
+                        this.setState({error:undefined})
+                    }, 2000)
+                } else {
+                    this.setState({view: 'login'})
+                }
+            })
         } catch (error) {
             this.setState({error: error.message + ' ' + IT})
 
             setTimeout(() => {
                 this.setState({error:undefined})
-            }, 2000);
+            }, 2000)
         }
     }
 
     handleGoToLogin = () => this.setState({view: 'login'})
     
     handleSearch = query => {
-        searchVehicles(query,vehicles =>
+        searchVehicles(query, (error, vehicles) =>
             this.setState({vehicles, vehicle: undefined, error: vehicles.length ? undefined : 'No results' + IT })
         )
     }
 
     handleResults = id => {
-        retrieveVehicle(id, vehicle =>
-            retrieveStyle(vehicle.style, style =>
-                this.setState({vehicle, style, vehicles:undefined})
+        retrieveVehicle(id, (error, vehicle) =>
+            retrieveStyle(vehicle.style, (error,style) =>
+                this.setState({ vehicle, style, vehicles: undefined })
             )
         )
     }

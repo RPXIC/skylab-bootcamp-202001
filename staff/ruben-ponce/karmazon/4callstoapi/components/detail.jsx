@@ -1,5 +1,4 @@
 function Detail({ vehicle: { name, year, price, image, color, maker, collection, description, url }, style: { name: styleName, image: styleImage, url: styleUrl } }) {
-    
     return  <li>
             <h3>{name} {year}</h3>
             <img src={image} />
