@@ -4,7 +4,7 @@ const { Component, Fragment } = React
 
 class App extends Component {
 
-    state = { view: 'login', loggedIn: false, vehicles: undefined, vehicle: undefined, style:undefined, error: undefined, token: undefined }
+    state = { view: 'login', loggedIn: false, vehicles: undefined, vehicle: undefined, style:undefined, error: undefined, token: undefined, user: undefined}
 
     handleLogin = (username, password) => {
         try {
@@ -75,9 +75,10 @@ class App extends Component {
 
     render() {
 
-        const {props: {title}, state: {view, vehicles, vehicle, error, style}, handleLogin, handleGoToLogin, handleGoToRegister, handleRegister, handleSearch, handleResults} = this 
+        const {props: {title}, state: {view, vehicles, vehicle, error, style, user}, handleLogin, handleGoToLogin, handleGoToRegister, handleRegister, handleSearch, handleResults} = this 
 
         return  <Fragment>
+            {user && <p>Welcome: {user.name}</p>} 
 
             <h1>{title}</h1>
 

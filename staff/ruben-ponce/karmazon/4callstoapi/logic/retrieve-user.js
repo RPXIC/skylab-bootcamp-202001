@@ -11,12 +11,9 @@ function retrieveUser(token, callback) {
         }, (error, response) => {
             if (error) return callback(error)
            
-            const user = JSON.parse(response.content), {error: _error} = user
-
-            
-            
+            let user = JSON.parse(response.content), {error: _error} = user
 
             if(_error) return callback(new Error(_error))
-            callback(undefined, token)
+            callback(undefined, user)
         })
     }
