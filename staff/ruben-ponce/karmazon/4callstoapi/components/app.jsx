@@ -19,7 +19,7 @@ class App extends Component {
                     retrieveUser(token, (error, user) => {
                         if(error)
                             return this.setState({ error: error.message + ' ' + IT })
-                    
+                        sessionStorage.token = token
                         this.setState({ view: 'search', user })
                     })
                 }
@@ -60,9 +60,17 @@ class App extends Component {
     handleGoToLogin = () => this.setState({view: 'login'})
     
     handleSearch = query => {
-        searchVehicles(query, (error, vehicles) =>
+        const {token} = sessionStorage
+        searchVehicles(query, token, (error, vehicles) => {
+
+            const {protocol, host, pathname} = location
+
+            const url = `${protocol}//${host}${pathname}?q=${query}`
+
+            history.pushState({path: url}, '', url)
+
             this.setState({vehicles, vehicle: undefined, error: vehicles.length ? undefined : 'No results' + IT })
-        )
+        })
     }
 
     handleResults = id => {
@@ -72,12 +80,28 @@ class App extends Component {
             )
         )
     }
+    handleHeart = id => {
+        try {
+            const { token } = sessionStorage
+            
+            toggleFavVehicle(token, id, (error, query) => {
+                this.handleSearch(query)
+            })
+        } catch (error) {
+            this.setState({error: error.message + ' ' + IT})
+
+            setTimeout(() => {
+                this.setState({error:undefined})
+            }, 2000)
+        }
+    }
 
     render() {
 
-        const {props: {title}, state: {view, vehicles, vehicle, error, style, user}, handleLogin, handleGoToLogin, handleGoToRegister, handleRegister, handleSearch, handleResults} = this 
+        const {props: {title}, state: {view, vehicles, vehicle, error, style, user}, handleLogin, handleGoToLogin, handleGoToRegister, handleRegister, handleSearch, handleResults, handleHeart} = this 
 
         return  <Fragment>
+
             {user && <p>Welcome: {user.name}</p>} 
 
             <h1>{title}</h1>
@@ -88,7 +112,7 @@ class App extends Component {
 
             { view === 'search' && < Search title= 'Search' onSubmit={handleSearch} error={error} />}
 
-            { view === 'search' && vehicles && < Results results={vehicles} onItemClick={handleResults} /> }
+            { view === 'search' && vehicles && < Results results={vehicles} onItemClick={handleResults} toggleHeart={handleHeart} /> }
 
             { view === 'search' && vehicle && < Detail vehicle={vehicle} style={style} /> }
 
