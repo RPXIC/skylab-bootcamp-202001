@@ -6,15 +6,19 @@ class App extends Component {
 
     state = { view: 'login', loggedIn: false, vehicles: undefined, vehicle: undefined, style:undefined, error: undefined, token: undefined, user: undefined}
 
+    handleError = error => {
+        this.setState({ error: error.message + ' ' + IT })
+
+        setTimeout(() => {
+            this.setState({ error: undefined })
+        }, 3000)
+    }
+
     handleLogin = (username, password) => {
         try {
             authenticateUser(username, password, (error, token) => {
                 if (error) {
-                    this.setState({ error: error.message + ' ' + IT })
-
-                    setTimeout(() => {
-                        this.setState({ error: undefined })
-                    }, 3000)
+                    this.handleError(error)
                 } else {
                     retrieveUser(token, (error, user) => {
                         if(error)
@@ -25,11 +29,7 @@ class App extends Component {
                 }
             })
         } catch (error) {
-            this.setState({error: error.message + ' ' + IT})
-
-            setTimeout(() => {
-                this.setState({error: undefined})
-            }, 3000)
+            this.handleError(error)
         }    
     }
 
@@ -39,21 +39,13 @@ class App extends Component {
         try {
             registerUser(name, surname, username, password, error => {
                 if (error) { 
-                    this.setState({error: error.message + ' ' + IT})
-
-                    setTimeout(() => {
-                        this.setState({error:undefined})
-                    }, 2000)
+                    this.handleError(error)
                 } else {
                     this.setState({view: 'login'})
                 }
             })
         } catch (error) {
-            this.setState({error: error.message + ' ' + IT})
-
-            setTimeout(() => {
-                this.setState({error:undefined})
-            }, 2000)
+            this.handleError(error)
         }
     }
 
@@ -88,11 +80,7 @@ class App extends Component {
                 this.handleSearch(query)
             })
         } catch (error) {
-            this.setState({error: error.message + ' ' + IT})
-
-            setTimeout(() => {
-                this.setState({error:undefined})
-            }, 2000)
+            this.handleError(error)
         }
     }
     logout = () => {
