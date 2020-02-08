@@ -95,4 +95,13 @@ body {
   color: orange;
 }
 
+img {
+  width: 100%;
+}
+
+span {
+  border-bottom: 1px solid gray;
+  width: 100%;
+}
+
 /*# sourceMappingURL=style.css.map */

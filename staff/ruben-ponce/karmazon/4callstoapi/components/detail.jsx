@@ -1,7 +1,7 @@
-function Detail({ vehicle: { name, year, price, image, color, maker, collection, description, url }, style: { name: styleName, image: styleImage, url: styleUrl } }) {
-    return  <li>
-            <h3>{name} {year}</h3>
-            <img src={image} />
+function Detail({ vehicle: { name, year, price, image, color, maker, collection, description, url }, style: { name: styleName, image: styleImage, url: styleUrl }, toggleHeart }) {
+    return  <div>
+            <h3>{name} {year}</h3> <Heart toggleHeart={toggleHeart}/>
+            <img src={image}/>
             <span>{price}</span>
             <p>{color}</p>
             <p>{maker}</p>
@@ -11,5 +11,5 @@ function Detail({ vehicle: { name, year, price, image, color, maker, collection,
             <img src={styleImage} />
             <p>{description}</p>
             <a>{url}</a>
-            </li>
+            </div>
 }

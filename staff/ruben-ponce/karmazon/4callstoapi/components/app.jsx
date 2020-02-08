@@ -95,14 +95,22 @@ class App extends Component {
             }, 2000)
         }
     }
+    logout = () => {
+        this.setState({view: 'login', token: undefined, user: undefined})
+        const a = location.host
+        location.replace(a)
+        sessionStorage.clear()
+        // const url = location.host
+        // history.replaceState(url, '', url)
+    }
 
     render() {
 
-        const {props: {title}, state: {view, vehicles, vehicle, error, style, user}, handleLogin, handleGoToLogin, handleGoToRegister, handleRegister, handleSearch, handleResults, handleHeart} = this 
+        const {props: {title}, state: {view, vehicles, vehicle, error, style, user}, handleLogin, handleGoToLogin, handleGoToRegister, handleRegister, handleSearch, handleResults, handleHeart, logout} = this 
 
         return  <Fragment>
 
-            {user && <p>Welcome: {user.name}</p>} 
+            {user && <p>Welcome: {user.name} <button onClick={logout}>Logout</button> </p> } 
 
             <h1>{title}</h1>
 
@@ -114,7 +122,7 @@ class App extends Component {
 
             { view === 'search' && vehicles && < Results results={vehicles} onItemClick={handleResults} toggleHeart={handleHeart} /> }
 
-            { view === 'search' && vehicle && < Detail vehicle={vehicle} style={style} /> }
+            { view === 'search' && vehicle && < Detail vehicle={vehicle} style={style} toggleHeart={handleHeart}/> }
 
                 </Fragment>
     }
