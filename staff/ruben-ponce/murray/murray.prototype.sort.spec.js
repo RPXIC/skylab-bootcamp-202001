@@ -1,3 +1,7 @@
+if (typeof require !== 'undefined') {
+    var Murray = require('./murray')
+}
+
 describe('Murray.prototype.sort', function () {
     it('should have return a,b,c,d of c,a,d,b', function () {
         var murray = new Murray('c','a','d','b');

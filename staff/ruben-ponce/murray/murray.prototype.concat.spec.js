@@ -1,3 +1,7 @@
+if (typeof require !== 'undefined') {
+    var Murray = require('./murray')
+}
+
 describe('Murray.prototype.concat', function () {
     it('should be result [1,2,3,4,5,6] of arrays [1,2,3] and [4,5,6]', function () {
         var murrayA = new Murray(1,2,3);

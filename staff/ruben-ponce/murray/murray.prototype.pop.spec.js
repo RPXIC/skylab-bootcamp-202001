@@ -1,3 +1,7 @@
+if (typeof require !== 'undefined') {
+    var Murray = require('./murray')
+}
+
 describe('Murray.prototype.pop', function () {
     it('should have return substracted last index of array [1,2,3]', function () {
         var murray = new Murray(1, 2, 3);
