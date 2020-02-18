@@ -1,10 +1,14 @@
 const net = require('net')
+var sockets = []
+const port = 8080
 const server = net.createServer(socket => {
+
+    socket.write(`Welcome to rpc chat server, Mr.${socket.remoteAddress.split(':')[3]}\n`);
+
     socket.on('data', chunk => {
-        // const message = JSON.parse(chunk)
-        // console.log(message)
+
         console.log(chunk.toString())
-        socket.end('OK')
+
     })
 })
-server.listen(8080)
+server.listen(port)
